@@ -53,6 +53,8 @@ public class BasicLinkedList {
         // delete the element
         if (previous == null) {
             // deleting the first element
+            // Note:  This was where our bug was located
+            //        current --becomes--> current.next
             start = current.next;
         } else if (current != null) {
             // deleting non-first element
