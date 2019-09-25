@@ -13,27 +13,80 @@ public class BasicLinkedList {
     }
 
     public void insertEnd(String newValue) {
+        // create a new node for our value
         Node newNode = new Node();
         newNode.value = newValue;
         newNode.next = null;
 
-        // handle empty list special case
+        // increase the size
+        count++;
+
+        // handle the special case
         if (start == null) {
             start = newNode;
             return;
         }
 
-        // navigate to the last element
+        // go to the last element
         Node current = start;
         while (current.next != null) {
             current = current.next;
         }
 
-        // insert the value after the last element
+        // add the element
         current.next = newNode;
+    }
 
-        // update the count
+    public void insertStart(String newValue) {
+        // create a new node for our value
+        Node newNode = new Node();
+        newNode.value = newValue;
+        newNode.next = start;
+
+        // increase the size
         count++;
+
+        // add the element
+        start = newNode;
+    }
+
+    public void removeEnd() {
+        // handle the empty list special case
+        if (count == 0) {
+            // can't return an element that doesn't exist!
+            return; 
+        }
+
+        count--;
+
+        // navigate to the second last element
+        Node current = start;
+        Node previous = null;
+        while (current.next != null) {
+            previous = current;
+            current = current.next;
+        }
+
+        // handle the 1-element list special case
+        if (previous == null) {
+            start = null;
+            return;
+        }
+
+        // delete the element
+        previous.next = null;
+    }
+
+    public void removeStart() {
+        // handle the empty list special case
+        if (count == 0) {
+            // can't return an element that doesn't exist!
+            return; 
+        }
+
+        count--;
+
+        start = start.next;
     }
 
     public void delete(String value) {
@@ -81,7 +134,13 @@ public class BasicLinkedList {
         list.print();
         list.insertEnd("Carla");
         list.print();
-        list.delete("Carla");
+        list.removeEnd();
+        list.print();
+        list.removeStart();
+        list.print();
+        list.insertStart("Roger");
+        list.print();
+        list.delete("Roger");
         list.print();
     }
 }
