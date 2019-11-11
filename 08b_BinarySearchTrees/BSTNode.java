@@ -1,63 +1,62 @@
+// CSCI 2010U - 08b Binary Search Trees
+
 public class BSTNode {
-    public BSTNode parent = null;
-    public BSTNode left = null;
-    public BSTNode right = null;
-    public int value = 0;
+  public BSTNode left = null;
+  public BSTNode right = null;
+  public int value = 0;
+  public BSTNode parent = null;
 
-    public void insert(int newValue) {
-        if (newValue < this.value) {
-            // go left (insert into the left subtree)
-            if (this.left == null) {
-                // we have no left child, so add it there
-                BSTNode newNode = new BSTNode();
-                newNode.parent = this;
-                newNode.value = newValue;
-                this.left = newNode;
-            } else {
-                // recursively insert into the left subtree
-                this.left.insert(newValue);
-            }
-        } else {
-            if (this.right == null) {
-                // we have no right child, so add it there
-                BSTNode newNode = new BSTNode();
-                newNode.parent = this;
-                newNode.value = newValue;
-                this.right = newNode;
-            } else {
-                // recursively insert into the right subtree
-                this.right.insert(newValue);
-            }
-        }
+  public void insert(int newValue) {
+    // perform binary-search style insertion
+    if (newValue < this.value) {
+      // insert the value to the left sub-tree
+      if (this.left == null) {
+        BSTNode newNode = new BSTNode();
+        newNode.value = newValue;
+        newNode.parent = this;
+        this.left = newNode;
+      } else {
+        this.left.insert(newValue);
+      }
+    } else {
+      // insert the value into the right sub-tree
+      if (this.right == null) {
+        BSTNode newNode = new BSTNode();
+        newNode.value = newValue;
+        newNode.parent = this;
+        this.right = newNode;
+      } else {
+        this.right.insert(newValue);
+      }
+    }
+  }
+
+  public void print(int depth) {
+    if (this.right != null) {
+      this.right.print(depth + 1);
     }
 
-    public void print() {
-        print(0);
+    for (int i = 0; i < depth; i++) {
+      System.out.print("\t");
+    }
+    System.out.println(this.value);
+
+    if (this.left != null) {
+      this.left.print(depth + 1);
+    }
+  }
+
+  public int getHeight() {
+    int leftHeight = 1;
+    if (left != null) {
+      leftHeight = left.getHeight() + 1;
     }
 
-    public void print(int depth) {
-        // right child (depth + 1)
-        if (this.right != null) {
-            this.right.print(depth + 1);
-        }
-
-        // node (depth)
-        for (int i = 0; i < depth; i++) {
-            System.out.print("   ");
-        }
-        System.out.println(this.value);
-
-        // left child (depth + 1)
-        if (this.left != null) {
-            this.left.print(depth + 1);
-        }
+    int rightHeight = 0;
+    if (right != null) {
+      rightHeight = right.getHeight() + 1;
     }
 
-    public static void main(String[] args) {
-        BSTNode root = new BSTNode();
-        root.value = 10;
-        root.insert(8);
-        root.insert(16);
-        root.print();
-    }
+    return (leftHeight > rightHeight) ? leftHeight : rightHeight;
+  }
 }
