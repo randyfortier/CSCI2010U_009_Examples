@@ -68,5 +68,16 @@ public class AdjacencyListGraph {
 
         Vertex d = graph.getVertex("D");
         System.out.println("Degree of D: " + d.getDegree());
+
+        List<Vertex> adjacencies = d.getAdjacencies();
+        System.out.println("Adjacencies of D: ");
+        for (Vertex v: adjacencies) {
+           System.out.print("\t" + v.getName() + ", adjacencies: ");
+  
+           for (Vertex a: v.getAdjacencies()) {
+              System.out.print("\t\t" + a.getName() + " ");
+           }
+           System.out.println("");
+        }
     }
 }
