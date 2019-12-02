@@ -60,7 +60,33 @@ public class Graph {
       return vertices.get(name);
    }
 
+   public Set<Vertex> visited;
+   public Map<Vertex, Edge> discoveryEdges;
+
    // implement DFS
+   public void dfs(String startingVertexName) {
+      Vertex startingVertex = vertices.get(startingVertexName);
+
+      visited = new HashSet<>();
+      discoveryEdges = new HashMap<>();
+
+      dfs(startingVertex);
+   }
+
+   private void dfs(Vertex u) {
+      visited.add(u); // u is now visited
+
+      List<Vertex> adjacencies = u.getAdjacencies();
+      for (Vertex v : adjacencies) {
+         if (!visited.contains(v)) {
+            // remember discovery edge
+            discoveryEdges.put(v, new Edge(v, u));
+
+            // recursively DFS v
+            dfs(v);
+         }
+      }
+   }
 
    public static void main(String[] args) {
       Graph graph = new Graph();
@@ -79,5 +105,18 @@ public class Graph {
       graph.addEdge("D", "E");
 
       // test DFS
+      graph.dfs("E");
+
+      System.out.println("Visited vertices:");
+      for (Vertex v : graph.visited) {
+         System.out.println("\t" + v.getName());
+      }
+
+      System.out.println("Discovery edges:");
+      for (Vertex v : graph.discoveryEdges.keySet()) {
+         Edge e = graph.discoveryEdges.get(v);
+         System.out.println("\t(" + e.getVertex1().getName() + 
+                           ", " + e.getVertex2().getName() + ")");
+      }
    }
 }
