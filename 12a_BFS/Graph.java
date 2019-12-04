@@ -5,7 +5,9 @@ public class Graph {
    private class Vertex {
       private String name;
       private List<Vertex> adjacencies;
-      // add extra fields
+
+      public boolean isVisited = false;
+      public Vertex parent = null;
 
       public Vertex(String name) {
          this.name = name;
@@ -23,8 +25,6 @@ public class Graph {
       public int getDegree() {
          return adjacencies.size();
       }
-
-      // add accessors for new fields
    }
 
    private HashMap<String, Vertex> vertices;
@@ -52,6 +52,35 @@ public class Graph {
    }
 
    // BFS
+   Vertex bfs(String startVertexName, String goalVertexName) 
+                     throws InterruptedException {
+      Vertex startVertex = getVertex(startVertexName);
+      startVertex.parent = null;
+      startVertex.isVisited = true;
+
+      LinkedBlockingQueue<Vertex> queue = new LinkedBlockingQueue<>();
+      queue.put(startVertex);
+
+      while (queue.size() > 0) {
+         Vertex v = queue.remove();
+
+         if (v.getName().equals(goalVertexName)) {
+            return v;
+         }
+
+         // search adjacencies of v
+         List<Vertex> adjacencies = v.getAdjacencies();
+         for (Vertex w : adjacencies) {
+            if (!w.isVisited) {
+               w.isVisited = true;
+               w.parent = v;
+               queue.put(w);
+            }
+         }
+      }
+
+      return null;
+   }
 
    public static void main(String[] args) {
       Graph graph = new Graph();
@@ -70,5 +99,19 @@ public class Graph {
       graph.addEdge("D", "E");
 
       // test BFS
+      try {
+         Vertex current = graph.bfs("A", "E");
+
+         if (current == null) {
+            System.out.println("No path found from A to E");
+         } else {
+            while (current != null) {
+               System.out.print(current.getName() + " <- ");
+               current = current.parent;
+            }
+         }
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
    }
 }
